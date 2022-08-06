@@ -23,7 +23,7 @@ func RegisterGrpcGateway(ctx context.Context, m *runtime.ServeMux, conn *grpc.Cl
 
 func buildAssignmentTransport() assignmentpb.LogAssignmentServiceServer {
 
-	transport := assignment.NewTransport(nil)
+	transport := assignment.NewTransport(assignment.BuildService())
 
 	return transport
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"ggclass_log_service/src/cmd"
 	"ggclass_log_service/src/config"
 	"ggclass_log_service/src/logger"
@@ -12,7 +13,10 @@ func main() {
 	config.Load()
 
 	logger.InitLog()
-	defer logger.SyncLog()
+	defer func() {
+		logger.SyncLog()
+		config.GetConfig().Mongo.Disconnect(context.Background())
+	}()
 
 	rootCmd := cmd.GetRoot()
 
