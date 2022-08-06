@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"ggclass_log_service/src/logger"
+	"github.com/rabbitmq/amqp091-go"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -17,12 +18,16 @@ type structure struct {
 	Mongo struct {
 		Url string `mapstructure:"url"`
 	} `mapstructure:"mongo"`
+	RabbitMQ struct {
+		Url string `mapstructure: "url"`
+	} `mapstructure:"rabbitmq"`
 }
 
 type config struct {
 	HttpPort string
 	GrpcPort string
 	Mongo    *mongo.Client
+	RabbitMQ *amqp091.Connection
 }
 
 var cfg config
@@ -56,9 +61,15 @@ func Load() error {
 		logger.Sugar().Errorf("err connect mongo", err)
 	}
 
+	rabbit, err := amqp091.Dial(config.RabbitMQ.Url)
+	if err != nil {
+		logger.Sugar().Error(err)
+	}
+
 	cfg.HttpPort = config.App.HttpPort
 	cfg.GrpcPort = config.App.GrpcPort
 	cfg.Mongo = client
+	cfg.RabbitMQ = rabbit
 
 	return nil
 

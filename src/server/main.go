@@ -16,6 +16,7 @@ func main() {
 	defer func() {
 		logger.SyncLog()
 		config.GetConfig().Mongo.Disconnect(context.Background())
+		config.GetConfig().RabbitMQ.Close()
 	}()
 
 	rootCmd := cmd.GetRoot()

@@ -1,6 +1,6 @@
 package assignment
 
 type createAssignmentLogInput struct {
-	AssignmentId int
-	Action       string
+	AssignmentId int    `json:"assignmentId"`
+	Action       string `json:"action"`
 }
