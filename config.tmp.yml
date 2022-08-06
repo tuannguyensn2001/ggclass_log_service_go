@@ -1,0 +1,3 @@
+app:
+  httpPort: 21000
+  grpcPort: 20000

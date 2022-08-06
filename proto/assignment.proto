@@ -1,0 +1,47 @@
+syntax="proto3";
+import "google/protobuf/timestamp.proto";
+
+package assignment;
+
+option go_package="./assignmentpb";
+import "google/api/annotations.proto";
+
+message LogAssignment {
+  string id = 6;
+  int64 assignmentId = 2;
+  string action = 3;
+  google.protobuf.Timestamp createdAt = 4;
+  google.protobuf.Timestamp updatedAt = 5;
+}
+
+message GetLogAssignmentByAssignmentRequest {
+  int64 assignmentId = 1;
+}
+
+message GetLogAssignmentByAssignmentResponse {
+  repeated LogAssignment data = 1;
+}
+
+message CreateLogAssignmentRequest {
+  int64 assignmentId = 1;
+  string action = 2;
+}
+
+message CreateLogAssignmentResponse {
+  string message = 1;
+}
+
+service LogAssignmentService {
+  rpc GetLogAssignmentByAssignment(GetLogAssignmentByAssignmentRequest) returns(GetLogAssignmentByAssignmentResponse){
+    option (google.api.http) = {
+      get: "/api/v1/logs/assignment",
+    };
+  }
+
+  rpc CreateLogAssignment(CreateLogAssignmentRequest) returns (CreateLogAssignmentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/logs/assignment",
+      body: "*"
+    };
+  }
+}
