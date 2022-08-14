@@ -26,7 +26,7 @@ func buildAssignmentTransport() assignmentpb.LogAssignmentServiceServer {
 	transport := assignment.NewTransport(assignment.BuildService())
 
 	rabbitTransport := assignment.NewRabbitTransport(assignment.BuildService())
-	rabbitTransport.Bootstrap(context.Background())
+	go rabbitTransport.Bootstrap(context.Background())
 
 	return transport
 
