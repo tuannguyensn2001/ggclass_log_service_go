@@ -49,11 +49,12 @@ func (r *repository) GetAll(ctx context.Context) ([]models.Assignment, error) {
 	return result, nil
 }
 
-func (r *repository) FindByAssignmentId(ctx context.Context, assignmentId int) ([]models.Assignment, error) {
+func (r *repository) FindByAssignmentId(ctx context.Context, assignmentId int, userId int) ([]models.Assignment, error) {
 	var result []models.Assignment
 
 	cursor, err := r.db.Database("ggclass").Collection(models.Assignment{}.CollectionName()).Find(ctx, models.Assignment{
 		AssignmentId: assignmentId,
+		UserId:       userId,
 	})
 
 	if err != nil {

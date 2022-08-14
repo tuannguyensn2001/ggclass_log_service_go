@@ -8,6 +8,7 @@ type Assignment struct {
 	CreatedAt    *time.Time `bson:"createdAt,omitempty"`
 	UpdatedAt    *time.Time `bson:"updatedAt,omitempty"`
 	Id           string     `bson:"_id,omitempty"`
+	UserId       int        `bson:"userId,omitempty"`
 }
 
 func (Assignment) CollectionName() string {

@@ -12,7 +12,7 @@ import (
 type IService interface {
 	Create(ctx context.Context, input createAssignmentLogInput) error
 	GetAll(ctx context.Context) ([]models.Assignment, error)
-	GetByAssignmentId(ctx context.Context, assignmentId int) ([]models.Assignment, error)
+	GetByAssignmentId(ctx context.Context, assignmentId int, userId int) ([]models.Assignment, error)
 }
 
 type transport struct {
@@ -26,7 +26,7 @@ func NewTransport(service IService) *transport {
 
 func (t *transport) GetLogAssignmentByAssignment(ctx context.Context, request *assignmentpb.GetLogAssignmentByAssignmentRequest) (*assignmentpb.GetLogAssignmentByAssignmentResponse, error) {
 
-	result, err := t.service.GetByAssignmentId(ctx, int(request.AssignmentId))
+	result, err := t.service.GetByAssignmentId(ctx, int(request.AssignmentId), int(request.UserId))
 	if err != nil {
 		return nil, status.Error(codes.Internal, "error")
 	}
@@ -40,6 +40,7 @@ func (t *transport) GetLogAssignmentByAssignment(ctx context.Context, request *a
 			Action:       item.Action,
 			CreatedAt:    timestamppb.New(*item.CreatedAt),
 			UpdatedAt:    timestamppb.New(*item.UpdatedAt),
+			UserId:       int64(item.UserId),
 		}
 	}
 
@@ -53,6 +54,7 @@ func (t *transport) CreateLogAssignment(ctx context.Context, request *assignment
 	input := createAssignmentLogInput{
 		AssignmentId: int(request.AssignmentId),
 		Action:       request.Action,
+		UserId:       int(request.UserId),
 	}
 
 	err := t.service.Create(ctx, input)

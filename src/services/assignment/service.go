@@ -9,7 +9,7 @@ import (
 type IRepository interface {
 	Create(ctx context.Context, assignment models.Assignment) error
 	GetAll(ctx context.Context) ([]models.Assignment, error)
-	FindByAssignmentId(ctx context.Context, assignmentId int) ([]models.Assignment, error)
+	FindByAssignmentId(ctx context.Context, assignmentId int, userId int) ([]models.Assignment, error)
 }
 
 type service struct {
@@ -27,6 +27,7 @@ func (s *service) Create(ctx context.Context, input createAssignmentLogInput) er
 		Action:       input.Action,
 		CreatedAt:    &now,
 		UpdatedAt:    &now,
+		UserId:       input.UserId,
 	}
 
 	return s.repository.Create(ctx, assignment)
@@ -36,6 +37,6 @@ func (s *service) GetAll(ctx context.Context) ([]models.Assignment, error) {
 	return s.repository.GetAll(ctx)
 }
 
-func (s *service) GetByAssignmentId(ctx context.Context, assignmentId int) ([]models.Assignment, error) {
-	return s.repository.FindByAssignmentId(ctx, assignmentId)
+func (s *service) GetByAssignmentId(ctx context.Context, assignmentId int, userId int) ([]models.Assignment, error) {
+	return s.repository.FindByAssignmentId(ctx, assignmentId, userId)
 }
